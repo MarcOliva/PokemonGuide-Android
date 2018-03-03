@@ -11,11 +11,11 @@
 
         <ImageView
             android:id="@+id/image_pokemon"
-            android:layout_width="200px"
-            android:layout_height="250px"
+            android:layout_width="match_parent"
+            android:layout_height="500px"
             android:layout_weight="1"
             android:layout_gravity="center"
-            android:scaleType="fitCenter"/>
+            android:scaleType="centerCrop"/>
 
         <TextView
             android:id="@+id/name_pokemon"

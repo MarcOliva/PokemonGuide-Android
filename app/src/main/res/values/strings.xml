@@ -6,4 +6,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="progress_text">Loading Pokemon</string>
+    <string name="not_found">Pokemon not found</string>
 </resources>

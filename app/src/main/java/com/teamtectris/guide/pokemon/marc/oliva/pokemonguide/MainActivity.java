@@ -2,10 +2,8 @@ package com.teamtectris.guide.pokemon.marc.oliva.pokemonguide;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.support.v7.widget.SearchView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
@@ -26,7 +24,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
     private static String URL_POKEMON = "https://pokeapi.co/api/v2/pokemon/";
     private static String URL_SPRITE = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/";
     private String linkImage;
@@ -34,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout progressLoadPokemon, notFoundPokemon;
     FrameLayout frameTitle;
     TextView titleApp;
-    TextInputEditText searchPokemon;
+    SearchView searchPokemon;
     List<Pokemon> pokemonList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,33 +50,29 @@ public class MainActivity extends AppCompatActivity {
         notFoundPokemon.setVisibility(View.GONE);
         frameTitle = findViewById(R.id.frame_app);
         gridView = findViewById(R.id.grid_pokemon);
+
         gridView.setEmptyView(progressLoadPokemon);
 
         adapterPokemonList();
-
-        searchPokemon.addTextChangedListener(new TextWatcher() {
+        searchPokemon.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+            public boolean onQueryTextSubmit(String query) {
+                return false;
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (s.toString().isEmpty()) {
+            public boolean onQueryTextChange(String newText) {
+                if(newText.isEmpty()){
                     adapterPokemonList();
-
-                } else {
-                    gridView.setAdapter(null);
-                    getPokemon(s.toString());
                     notFoundPokemon.setVisibility(View.GONE);
+                }else{
+                    gridView.setAdapter(null);
+                    getPokemon(newText);
                 }
+                return true;
             }
         });
+
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -104,10 +98,6 @@ public class MainActivity extends AppCompatActivity {
                                 Pokemon pokemon = new Pokemon(name, urlImage);
                                 pokemonList.add(pokemon);
                             }
-                            if (pokemonList.size() > 0) {
-                                notFoundPokemon.setVisibility(View.GONE);
-                                progressLoadPokemon.setVisibility(View.GONE);
-                            }
                             gridView.setAdapter(new PokemonAdapter(getApplicationContext(), pokemonList));
 
                         } catch (JSONException e) {
@@ -129,36 +119,37 @@ public class MainActivity extends AppCompatActivity {
         notFoundPokemon.setVisibility(View.GONE);
         progressLoadPokemon.setVisibility(View.VISIBLE);
         pokemonList = new ArrayList<>();
-        AndroidNetworking.get(URL_POKEMON + namePokemon)
-                .build()
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            JSONObject sprite = response.getJSONObject("sprites");
-                            String name = response.getString("name");
-                            String urlImage = sprite.getString("front_default");
-                            Pokemon pokemon = new Pokemon(name, urlImage);
-                            pokemonList.add(pokemon);
-                            if (pokemonList.size() > 0 || gridView.getAdapter()!= null) {
-                                progressLoadPokemon.setVisibility(View.VISIBLE);
+        if(!namePokemon.isEmpty()){
+            AndroidNetworking.get(URL_POKEMON + namePokemon)
+                    .build()
+                    .getAsJSONObject(new JSONObjectRequestListener() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
                                 notFoundPokemon.setVisibility(View.GONE);
-                            } else {
+                                JSONObject sprite = response.getJSONObject("sprites");
+                                String name = response.getString("name");
+                                String urlImage = sprite.getString("front_default");
+                                Pokemon pokemon = new Pokemon(name, urlImage);
+                                pokemonList.add(pokemon);
+                                gridView.setAdapter(new PokemonAdapter(getApplicationContext(), pokemonList));
+                                progressLoadPokemon.setVisibility(View.GONE);
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        @Override
+                        public void onError(ANError anError) {
+                            progressLoadPokemon.setVisibility(View.GONE);
+                            if(pokemonList.size()<=0){
                                 notFoundPokemon.setVisibility(View.VISIBLE);
                             }
-                            gridView.setAdapter(new PokemonAdapter(getApplicationContext(), pokemonList));
-                            progressLoadPokemon.setVisibility(View.GONE);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
 
-                    @Override
-                    public void onError(ANError anError) {
-                        progressLoadPokemon.setVisibility(View.GONE);
-                        notFoundPokemon.setVisibility(View.VISIBLE);
-                    }
-                });
+                        }
+                    });
+        }
+
     }
 
 }

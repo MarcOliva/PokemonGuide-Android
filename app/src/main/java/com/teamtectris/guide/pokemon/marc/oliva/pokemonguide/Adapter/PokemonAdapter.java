@@ -21,9 +21,10 @@ import java.util.List;
 public class PokemonAdapter extends BaseAdapter {
     private Context mContext;
     private List<Pokemon> mPokemonList;
-    public PokemonAdapter(Context context,List<Pokemon> pokemonList) {
+
+    public PokemonAdapter(Context context, List<Pokemon> pokemonList) {
         mContext = context;
-        mPokemonList=pokemonList;
+        mPokemonList = pokemonList;
     }
 
     @Override
@@ -44,8 +45,8 @@ public class PokemonAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View gridView = convertView;
-        if(gridView == null){
-            gridView = LayoutInflater.from(mContext).inflate(R.layout.list_item,parent,false);
+        if (gridView == null) {
+            gridView = LayoutInflater.from(mContext).inflate(R.layout.list_item, parent, false);
         }
         Pokemon currentPokemon = mPokemonList.get(position);
         ImageView image = gridView.findViewById(R.id.image_pokemon);

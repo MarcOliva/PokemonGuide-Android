@@ -7,37 +7,27 @@
     android:layout_height="match_parent"
     tools:context="com.teamtectris.guide.pokemon.marc.oliva.pokemonguide.MainActivity">
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <FrameLayout
-            android:id="@+id/frame_app"
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/app_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary">
+            android:background="?attr/colorPrimary"
+            android:minHeight="?attr/actionBarSize">
 
             <TextView
                 android:id="@+id/title_app"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/app_name"
+                android:layout_gravity="center"
+                android:text="Pokemon Guide"
                 android:textSize="24sp" />
-
-        </FrameLayout>
-        <android.support.v7.widget.SearchView
-            android:id="@+id/search_pokemon_edit_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:iconifiedByDefault="false"
-            android:queryHint="Search"
-            android:layout_centerHorizontal="true">
-
-        </android.support.v7.widget.SearchView>
-
-
+        </android.support.v7.widget.Toolbar>
 
         <GridView
             android:id="@+id/grid_pokemon"
@@ -77,6 +67,7 @@
             android:gravity="center"
             android:text="@string/progress_text" />
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/notfound"
         android:layout_width="match_parent"
@@ -91,7 +82,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:background="@drawable/ic_info_outline_black_24dp"/>
+            android:background="@drawable/ic_info_outline_black_24dp" />
 
         <TextView
             android:layout_width="match_parent"
@@ -99,7 +90,6 @@
             android:gravity="center"
             android:text="@string/not_found" />
     </LinearLayout>
-
 
 
 </android.support.constraint.ConstraintLayout>

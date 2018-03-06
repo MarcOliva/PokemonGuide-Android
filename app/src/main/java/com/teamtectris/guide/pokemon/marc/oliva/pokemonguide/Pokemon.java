@@ -7,7 +7,8 @@ package com.teamtectris.guide.pokemon.marc.oliva.pokemonguide;
 public class Pokemon {
     private String mName;
     private String mUrlImage;
-    public Pokemon(String name, String urlImage){
+
+    public Pokemon(String name, String urlImage) {
         this.mName = name;
         this.mUrlImage = urlImage;
     }
